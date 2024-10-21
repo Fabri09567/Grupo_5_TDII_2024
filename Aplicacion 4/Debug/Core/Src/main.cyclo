@@ -1,0 +1,8 @@
+../Core/Src/main.c:34:6:Configuracion_Leds_Boton	1
+../Core/Src/main.c:55:6:Cambiar_Secuencia	2
+../Core/Src/main.c:64:6:Secuencia1	1
+../Core/Src/main.c:69:6:Secuencia2	1
+../Core/Src/main.c:74:6:Secuencia3	1
+../Core/Src/main.c:83:6:Secuencia4	1
+../Core/Src/main.c:90:6:Ejecutar_Secuencia	5
+../Core/Src/main.c:110:5:main	4
