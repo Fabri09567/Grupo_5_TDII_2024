@@ -37,6 +37,9 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 
+uint8_t secuencia1(uint16_t* vector_leds);
+uint8_t secuencia2(uint16_t* vector_leds);
+
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/

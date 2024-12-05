@@ -15,6 +15,14 @@ typedef uint16_t led_t;
 typedef uint32_t ms;
 typedef bool buttonStatus_t;
 
+#define CANT_LEDS 3
+
+void Error_Handler(void);
+uint8_t secuencia1(uint16_t* vector_Pin_LEDs, uint8_t retardo_ms);
+uint8_t secuencia2(uint16_t* vector_Pin_LEDs, uint16_t retardo_ms);
+uint8_t secuencia3(uint16_t* vector_Pin_LEDs);
+uint8_t secuencia4(uint16_t* vector_Pin_LEDs);
+
 void MX_GPIO_Init(void);
 void writeLedOn_GPIO (led_t LDx);
 void writeLedOff_GPIO (led_t LDx);

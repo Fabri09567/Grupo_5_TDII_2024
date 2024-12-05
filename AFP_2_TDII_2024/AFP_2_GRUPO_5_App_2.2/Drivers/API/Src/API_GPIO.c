@@ -88,10 +88,6 @@ void toggleLed_GPIO (led_t LDx){
 	HAL_GPIO_TogglePin (GPIOB, LDx);
 }
 
-void delay_ms (uint32_t ms){
-	HAL_Delay(ms);
-}
-
 buttonStatus_t readButton_GPIO(void) {
     return HAL_GPIO_ReadPin(GPIOC, USER_Btn_Pin);
 }

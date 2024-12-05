@@ -109,7 +109,7 @@ void Error_Handler(void);
 #define LD2_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-
+#define CANT_LEDS 3
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

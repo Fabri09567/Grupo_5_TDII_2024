@@ -23,12 +23,6 @@
 #include "API_GPIO.h"
 
 
-#define LED1 0x01  // o el valor correspondiente
-#define LED2 0x02  // o el valor correspondiente
-#define LED3 0x03  // o el valor correspondiente
-
-uint16_t LEDS[3]= {LED1, LED2, LED3};
-buttonStatus_t User_Button;
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -86,127 +80,50 @@ void MX_USB_OTG_FS_PCD_Init(void);
   * @retval int
   */
 
-// Variables globales
-uint8_t secuencia_actual = 1;  // Inicia en la secuencia 1
-uint8_t boton_presionado = 0;
-
-// Función para configurar LEDs y el botón
-void Configuracion_Leds_Boton(void) {
-    __HAL_RCC_GPIOB_CLK_ENABLE();  // Habilitar reloj para GPIOB
-    __HAL_RCC_GPIOC_CLK_ENABLE();  // Habilitar reloj para GPIOC (botón)
-
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-
-
-    // Configuración del botón como entrada
-    GPIO_InitStruct.Pin = GPIO_PIN_13;  // Botón onboard (PA0 o PC13 según la placa)
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-}
-
-// Función para manejar el cambio de secuencias
-void Cambiar_Secuencia(void) {
-    // Avanza a la siguiente secuencia
-    secuencia_actual++;
-    if (secuencia_actual > 4) {
-        secuencia_actual = 1;  // Reinicia a la secuencia 1
-    }
-}
-
-// Funciones para cada secuencia
-void Secuencia1(void) {
-	toggleLed_GPIO (LED1);
-    delay_ms(150);
-}
-
-void Secuencia2(void) {
-	toggleLed_GPIO (LED1 | LED2 | LED3);
-    delay_ms(300);
-}
-
-void Secuencia3(void) {
-	toggleLed_GPIO(LED1);
-    delay_ms(100);
-    toggleLed_GPIO(LED2);
-    delay_ms(300);
-    toggleLed_GPIO(LED3);
-    delay_ms(600);
-}
-
-void Secuencia4(void) {
-	toggleLed_GPIO(LED1 | LED3);  // LED1 y LED3 parpadean juntos
-	toggleLed_GPIO(LED2);  // LED2 parpadea inverso
-    delay_ms(150);
-}
-
-// Función principal de control de secuencias
-void Ejecutar_Secuencia(void) {
-    switch (secuencia_actual) {
-        case 1:
-            Secuencia1();
-            break;
-        case 2:
-            Secuencia2();
-            break;
-        case 3:
-            Secuencia3();
-            break;
-        case 4:
-            Secuencia4();
-            break;
-        default:
-            break;
-    }
-}
 int main(void)
 {
 
-  /* USER CODE BEGIN 1 */
+	  /* USER CODE BEGIN 1 */
 
-  /* USER CODE END 1 */
+	  /* USER CODE END 1 */
 
-  /* MCU Configuration--------------------------------------------------------*/
+	  /* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+	  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+	  HAL_Init();
 
-  /* USER CODE BEGIN Init */
+	  /* USER CODE BEGIN Init */
 
-  /* USER CODE END Init */
+	  /* USER CODE END Init */
 
-  /* Configure the system clock */
-  SystemClock_Config();
+	  /* Configure the system clock */
+	  SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
+	  /* USER CODE BEGIN SysInit */
 
-  /* USER CODE END SysInit */
+	  /* USER CODE END SysInit */
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_ETH_Init();
-  MX_USART3_UART_Init();
-  MX_USB_OTG_FS_PCD_Init();
-  /* USER CODE BEGIN 2 */
+	  /* Initialize all configured peripherals */
+	  MX_GPIO_Init();
+	  MX_ETH_Init();
+	  MX_USART3_UART_Init();
+	  MX_USB_OTG_FS_PCD_Init();
+	  /* USER CODE BEGIN 2 */
+	  uint16_t vector_leds[CANT_LEDS] = {LD1_Pin, LD2_Pin, LD3_Pin};
+	  uint16_t vector_tiempos[tiempos] = {100, 250, 500, 1000};
+	  uint8_t caso = 0;
+	  /* USER CODE END 2 */
 
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1) {
-	  User_Button = readButton_GPIO();
-        if (User_Button == 1 && !boton_presionado) {
-            // Si el botón es presionado (nivel bajo), cambiar secuencia
-            Cambiar_Secuencia();
-            boton_presionado = 1;
-        } else if (User_Button == GPIO_PIN_SET) {
-            boton_presionado = 0;  // Resetear cuando se suelte el botón
-        }
-
-        Ejecutar_Secuencia();
-    }
-}
+	  /* Infinite loop */
+	  /* USER CODE BEGIN WHILE */
+	  while (1)
+	  {
+	    /* USER CODE END WHILE */
+		  caso = secuencia(vector_leds, vector_tiempos[caso], caso);
+	    /* USER CODE BEGIN 3 */
+	  }
+	  /* USER CODE END 3 */
+	 }
 /**
   * @brief System Clock Configuration
   * @retval None
@@ -369,11 +286,45 @@ void MX_USB_OTG_FS_PCD_Init(void)
 
 }
 
-/**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
+uint8_t secuencia(uint16_t* vector_leds, uint16_t tiempo, uint8_t caso){
+	/*TIEMPO DE ENCENDIDO*/
+	for(int tick=0;tick<(tiempo/2);tick++){
+		if(readButton_GPIO()){
+			while(readButton_GPIO()){}; //Antirebote por SW
+			for(int i=0;i<CANT_LEDS;i++){
+				writeLedOff_GPIO(vector_leds[i]);
+			}
+			if(caso != (tiempos-1)){
+				return (caso+1);
+			}else{
+				return 0;
+			}
+		}
+		for(int j=0;j<CANT_LEDS;j++){
+			writeLedOn_GPIO(vector_leds[j]);
+		}
+		HAL_Delay(1);
+	}
+	/*TIEMPO DE APAGADO*/
+	for(int tick=0;tick<(tiempo/2);tick++){
+		if(readButton_GPIO()){
+			while(readButton_GPIO()){};
+			for(int i=0;i<CANT_LEDS;i++){
+				writeLedOff_GPIO(vector_leds[i]);
+			}
+			if(caso != (tiempos-1)){
+				return (caso+1);
+			}else{
+				return 0;
+			}
+		}
+		for(int j=0;j<CANT_LEDS;j++){
+			writeLedOff_GPIO(vector_leds[j]);
+		}
+		HAL_Delay(1);
+	}
+	return caso;
+}
 
 void Error_Handler(void)
 {

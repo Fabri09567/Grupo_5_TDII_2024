@@ -89,13 +89,9 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-#define LED1 0x01  // o el valor correspondiente
-#define LED2 0x02  // o el valor correspondiente
-#define LED3 0x03  // o el valor correspondiente
 
-uint16_t LEDS[3]= {LED1, LED2, LED3};
+  uint16_t vector_leds [CANT_LEDS] = {LD1_Pin, LD2_Pin, LD3_Pin};
 
-  uint16_t User_Button;
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -117,15 +113,17 @@ uint16_t LEDS[3]= {LED1, LED2, LED3};
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  while (1) {
-          for (int i = 0; i < sizeof(LEDS) / sizeof(LEDS[0]); i++) {
-        	  writeLedOn_GPIO(LEDS[i]);
-              delay_ms(200);
-
-              writeLedOff_GPIO(LEDS[i]);
-              delay_ms(200);
-          }
-      }
+  while (1)
+    {
+      /* USER CODE END WHILE */
+  	  for(int i=0; i<CANT_LEDS;i++){
+  		toggleLed_GPIO(vector_leds[i]);
+  		Delay_ms(200);
+  	  	toggleLed_GPIO(vector_leds[i]);
+  	  	Delay_ms(200);
+  	  	  }
+      /* USER CODE BEGIN 3 */
+    }
 }
 
 /**

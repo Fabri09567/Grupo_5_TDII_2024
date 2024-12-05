@@ -31,7 +31,8 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+uint8_t secuencia1(uint16_t* vector_leds);
+uint8_t secuencia2(uint16_t* vector_leds);
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -109,7 +110,8 @@ void Error_Handler(void);
 #define LD2_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-
+#define CANT_LEDS 3
+#define Delay_ms 200
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

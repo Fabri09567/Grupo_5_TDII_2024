@@ -87,6 +87,6 @@ void toggleLed_GPIO (led_t LDx){
 	HAL_GPIO_TogglePin (GPIOB, LDx);
 }
 
-void delay_ms (uint32_t ms){
+void Delay_ms (uint16_t ms){
 	HAL_Delay(ms);
 }

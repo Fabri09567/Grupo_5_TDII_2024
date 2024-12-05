@@ -1,6 +1,8 @@
-../Core/Src/main.c:81:5:main	32	static
-../Core/Src/main.c:151:6:SystemClock_Config	88	static
-../Core/Src/main.c:197:6:MX_ETH_Init	8	static
-../Core/Src/main.c:246:6:MX_USART3_UART_Init	8	static
-../Core/Src/main.c:279:6:MX_USB_OTG_FS_PCD_Init	8	static
-../Core/Src/main.c:315:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:80:5:main	24	static
+../Core/Src/main.c:142:6:SystemClock_Config	88	static
+../Core/Src/main.c:189:6:MX_ETH_Init	8	static
+../Core/Src/main.c:238:6:MX_USART3_UART_Init	8	static
+../Core/Src/main.c:271:6:MX_USB_OTG_FS_PCD_Init	8	static
+../Core/Src/main.c:298:11:secuencia1	40	static
+../Core/Src/main.c:330:12:secuencia2	40	static
+../Core/Src/main.c:369:6:Error_Handler	4	static,ignoring_inline_asm

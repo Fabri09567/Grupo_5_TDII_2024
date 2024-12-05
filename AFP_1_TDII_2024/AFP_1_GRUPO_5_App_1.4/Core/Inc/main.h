@@ -31,12 +31,13 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#define CANT_LEDS 3
+#define tiempos 4
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
+uint8_t secuencia(uint16_t* vector_leds, uint16_t tiempo, uint8_t caso);
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/

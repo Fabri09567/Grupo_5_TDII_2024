@@ -22,7 +22,6 @@
 #include <stdbool.h>
 #include "API_GPIO.h"
 
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -81,73 +80,65 @@ void MX_USB_OTG_FS_PCD_Init(void);
 int main(void)
 {
 
-  /* USER CODE BEGIN 1 */
+	  /* USER CODE BEGIN 1 */
 
-  /* USER CODE END 1 */
+	  /* USER CODE END 1 */
 
-  /* MCU Configuration--------------------------------------------------------*/
+	  /* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+	  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+	  HAL_Init();
 
-  /* USER CODE BEGIN Init */
-#define LED1 0x01  // o el valor correspondiente
-#define LED2 0x02  // o el valor correspondiente
-#define LED3 0x03  // o el valor correspondiente
+	  /* USER CODE BEGIN Init */
 
-uint16_t LEDS[3]= {LED1, LED2, LED3};
-buttonStatus_t User_Button;
-bool reverse = false; // Inicializa 'reverse' en falso
-  /* USER CODE END Init */
+	  /* USER CODE END Init */
 
-  /* Configure the system clock */
-  SystemClock_Config();
+	  /* Configure the system clock */
+	  SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
+	  /* USER CODE BEGIN SysInit */
 
-  /* USER CODE END SysInit */
+	  /* USER CODE END SysInit */
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_ETH_Init();
-  MX_USART3_UART_Init();
-  MX_USB_OTG_FS_PCD_Init();
-  /* USER CODE BEGIN 2 */
+	  /* Initialize all configured peripherals */
+	  MX_GPIO_Init();
+	  MX_ETH_Init();
+	  MX_USART3_UART_Init();
+	  MX_USB_OTG_FS_PCD_Init();
+	  /* USER CODE BEGIN 2 */
+	  uint16_t vector_leds [CANT_LEDS] = {LD1_Pin, LD2_Pin, LD3_Pin};
+	  uint16_t sec_actual = 1;
+	  /* USER CODE END 2 */
 
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-	   while (1) {
-		   User_Button = readButton_GPIO();
-	        if (User_Button == GPIO_PIN_SET) {
-	            reverse = !reverse;
-	            delay_ms(200);
-	        }
-
-	        if (reverse) {
-	            for (int i = sizeof(LEDS) / sizeof(LEDS[0]) - 1; i >= 0; i--) {
-	            	writeLedOn_GPIO(LEDS[i]);
-	                delay_ms(200);
-	                writeLedOff_GPIO(LEDS[i]);
-	                delay_ms(200);
-	            }
-	        } else {
-	            for (int i = 0; i < sizeof(LEDS) / sizeof(LEDS[0]); i++) {
-	            	writeLedOn_GPIO(LEDS[i]);
-	                delay_ms(200);
-	                writeLedOff_GPIO(LEDS[i]);
-	                delay_ms(200);
-	            }
-	        }
-	    }
-  /* USER CODE END 3 */
+	  /* Infinite loop */
+	  /* USER CODE BEGIN WHILE */
+	  while (1)
+	   {
+	     /* USER CODE END WHILE */
+	 	  switch (sec_actual){
+	 	  case 1:
+	 		  sec_actual = secuencia1 (vector_leds);
+	 		  break;
+	 	  case 2:
+	 		  sec_actual = secuencia2 (vector_leds);
+	 		  break;
+	 		  default:
+	 		  for(int j=0;j<CANT_LEDS;j++){
+	 			 writeLedOff_GPIO(vector_leds[j]);
+	 		  	  }
+	 		  break;
+	 	  }
+	     /* USER CODE BEGIN 3 */
+	   }
+	  /* USER CODE END 3 */
 }
 
 /**
-  * @brief System Clock Configuration
+  * @brief ETH Initialization Function
+  * @param None
   * @retval None
   */
+
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -194,6 +185,7 @@ void SystemClock_Config(void)
   * @param None
   * @retval None
   */
+
 void MX_ETH_Init(void)
 {
 
@@ -300,11 +292,73 @@ void MX_USB_OTG_FS_PCD_Init(void)
   {
     Error_Handler();
   }
+}
   /* USER CODE BEGIN USB_OTG_FS_Init 2 */
 
+  uint8_t secuencia1(uint16_t* vector_leds)
+  {
+
+	  for(int i=0; i<CANT_LEDS;i++){
+	  		/*TIEMPO DE ENCENDIDO*/
+	  		for(int tick=0;tick<delay_ms;tick++){
+	  			if(readButton_GPIO()){
+	  				while(readButton_GPIO()){}; //Antirebote por SW
+	  				  for(int j=0;j<CANT_LEDS;j++){
+	  					  writeLedOff_GPIO(vector_leds[j]);
+	  				  }
+	  				return 2;
+	  			}
+	  			writeLedOn_GPIO(vector_leds[i]);
+	  			HAL_Delay(1);
+	  		}
+	  		/*TIEMPO DE APAGADO*/
+	  		for(int tick=0;tick<delay_ms;tick++){
+	  			if(readButton_GPIO()){
+	  				while(readButton_GPIO()){};
+	  				  for(int j=0;j<CANT_LEDS;j++){
+	  					  writeLedOff_GPIO(vector_leds[j]);
+	  				  }
+	  				return 2;
+	  			}
+	  			writeLedOff_GPIO(vector_leds[i]);
+	  			HAL_Delay(1);
+	  		}
+	  	}
+	  	return 1;
+	  }
+
+	  uint8_t secuencia2(uint16_t* vector_leds)
+	  {
+	  	for(int i=(CANT_LEDS-1);i>=0;i--){
+	  		/*TIEMPO DE ENCENDIDO*/
+	  		for(int tick=0;tick<delay_ms;tick++){
+	  			if(readButton_GPIO()){
+	  				while(readButton_GPIO() == GPIO_PIN_SET){}; //Antirebote por SW
+	  				for(int j=0;j<CANT_LEDS;j++){
+	  					writeLedOff_GPIO(vector_leds[j]);
+	  				}
+	  				return 1;
+	  			}
+	  			writeLedOn_GPIO(vector_leds[i]);
+	  			HAL_Delay(1);
+	  		}
+	  		/*TIEMPO DE APAGADO*/
+	  		for(int tick=0;tick<delay_ms;tick++){
+	  			if(readButton_GPIO()){
+	  				while(readButton_GPIO()){};
+	  				for(int j=0;j<CANT_LEDS;j++){
+	  					writeLedOff_GPIO(vector_leds[j]);
+	  				}
+	  				return 1;
+	  			}
+	  			writeLedOff_GPIO(vector_leds[i]);
+	  			HAL_Delay(1);
+	  		}
+	  	}
+	  	return 2;
+	  }
   /* USER CODE END USB_OTG_FS_Init 2 */
 
-}
 
 /**
   * @brief GPIO Initialization Function

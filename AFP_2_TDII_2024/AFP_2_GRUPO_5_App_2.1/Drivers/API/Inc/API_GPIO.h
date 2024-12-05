@@ -13,6 +13,8 @@
 typedef uint16_t led_t;
 typedef uint32_t ms;
 
+#define CANT_LEDS 3
+
 void MX_GPIO_Init(void);
 void writeLedOn_GPIO (led_t LDx);
 void writeLedOff_GPIO (led_t LDx);
