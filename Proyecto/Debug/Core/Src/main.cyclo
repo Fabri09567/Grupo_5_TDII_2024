@@ -1,0 +1,8 @@
+../Core/Src/main.c:85:5:main	6
+../Core/Src/main.c:181:7:Bluetooth_ProcessCommand	3
+../Core/Src/main.c:194:7:SystemClock_Config	3
+../Core/Src/main.c:240:7:MX_I2C1_Init	4
+../Core/Src/main.c:288:7:MX_TIM5_Init	4
+../Core/Src/main.c:333:7:MX_TIM9_Init	3
+../Core/Src/main.c:371:7:MX_USART2_UART_Init	2
+../Core/Src/main.c:400:7:Error_Handler	1

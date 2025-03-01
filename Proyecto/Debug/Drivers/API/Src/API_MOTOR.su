@@ -1,0 +1,2 @@
+../Drivers/API/Src/API_MOTOR.c:19:6:Stepper_Init	32	static
+../Drivers/API/Src/API_MOTOR.c:30:6:Stepper_Step	56	static
