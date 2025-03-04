@@ -1,2 +1,0 @@
-../Drivers/API/Src/ULTRASONICO.c:11:6:ultrasonic_init	8	static
-../Drivers/API/Src/ULTRASONICO.c:17:10:ultrasonic_measure_distance	32	static

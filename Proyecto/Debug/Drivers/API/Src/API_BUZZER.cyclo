@@ -1,3 +1,0 @@
-../Drivers/API/Src/API_BUZZER.c:10:6:Buzzer_Init	1
-../Drivers/API/Src/API_BUZZER.c:20:6:Buzzer_On	1
-../Drivers/API/Src/API_BUZZER.c:24:6:Buzzer_Off	1

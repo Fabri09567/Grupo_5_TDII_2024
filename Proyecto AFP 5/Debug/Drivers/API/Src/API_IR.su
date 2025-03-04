@@ -1,0 +1,3 @@
+../Drivers/API/Src/API_IR.c:24:6:activando_alarma	8	static
+../Drivers/API/Src/API_IR.c:35:6:alarma_sonando	8	static
+../Drivers/API/Src/API_IR.c:43:6:alarma_conteo	8	static
